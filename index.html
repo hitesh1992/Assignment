@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+        .outer-div{
+            justify-content: center;
+            align-content: center;
+            background-color: gray;
+            padding: 20px;
+        }
+
+        .inner-div{
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            background-color: white;
+            margin: auto;
+            width: 50%;
+            padding: 40px;
+            font-family: Sans-serif;
+            font-weight: bold;
+        }
+        label, input{
+            display: block;
+        }
+
+        input[type=password]{
+            width: 80%;
+            height: 30px;
+            border-radius: 5px;
+            border-color: darkgray;
+            size: inherit;
+        }
+
+        .resetBtn{
+            width: 80%;
+            height: 40px;
+            border-radius: 3px;
+            border-color: darkgray;
+            background-color: dodgerblue;
+            color: white;
+            font-weight: bold;
+            font-size: medium;
+            margin: 20px 10px;
+        }
+        
+        .icon{        
+            background-color: forestgreen;
+            left:0; top: 2px;
+            width: 20px; 
+            height: 20px;
+            text-align: center;
+            border-radius: 50%;
+            color: white;
+            display: inline-block;
+        }
+
+        .criteria{
+            display: flex;
+            margin: auto 3px;
+        }
+
+        #msgDiv {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            justify-items: start;
+        }
+
+        
+
+        .messages{
+            font-weight: normal;
+            color: forestgreen;
+            margin: auto 5px;
+        }
+
+        h4{
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="outer-div">
+        <div class="inner-div">
+            <h2>Choose new password</h2>
+            <h4>Almost done. Enter your new password and you are all set</h4>
+           <form id="myform">
+                <label for="newPassword">Create a password</label><br/>
+                <input type="password" class="newPassword" name="newPassword" id="newPassword" onkeyup="validateEmail()" /><br/>
+                <label for="confirmPassword">Confirm new password</label><br/>
+                <input type="password" class="confirmPassword" name="confirmPassword" id="confirmPassword"  onchange="validateConfirmEmail()" /><br/>
+                
+                <div id="msgDiv">
+                    
+                    <div class="criteria" id="criteria1">
+                        <div class="icon">✔</div>
+                        <div class="messages" id="msg1"> one lowercase character</div>
+                    </div>
+                    <div class="criteria" id="criteria2">
+                        <div class="icon">✔</div>
+                        <div class="messages" id="msg2"> one special character</div>
+                    </div>
+                    <div class="criteria" id="criteria3">
+                        <div class="icon">✔</div>
+                        <div class="messages" id="msg3"> one uppercase character</div>
+                    </div>
+                    <div class="criteria" id="criteria4">
+                        <div class="icon">✔</div>
+                        <div class="messages" id="msg4"> 8 character minimum</div>
+                    </div>
+                    <div class="criteria" id="criteria5">
+                        <div class="icon">✔</div>
+                        <div class="messages" id="msg5"> one number</div>
+                    </div>
+                </div>
+                <input type="button" id="resetBtn"   class="resetBtn" value="Reset password" onclick="return validateForm()"/>
+            </form> 
+        </div>
+    </div>
+
+    <script>
+
+        function validateForm(){
+                if(validateConfirmEmail()){
+                    alert("Password reset successfully.")
+                    document.getElementById("myform").reset();
+                }
+        }
+
+
+
+        function validateEmail(){
+            const smallCaseRegex = new RegExp(/[a-z]{1,}/);
+            const elemVal = document.getElementById("newPassword").value;
+            if(elemVal.length >0 && !smallCaseRegex.test(elemVal)){ 
+
+                let elem1 = document.getElementById("criteria1").getElementsByClassName('icon')[0];
+                elem1.style.backgroundColor  = "red";
+                elem1.innerText  = "✕";
+            }else {
+                let elem1 = document.getElementById("criteria1").getElementsByClassName('icon')[0];
+                elem1.style.backgroundColor  =  "forestgreen";
+                elem1.innerText  = "✔";
+            }
+
+            const upperCaseRegex = new RegExp(/[A-Z]{1,}/);
+
+            if(elemVal.length >0 && !upperCaseRegex.test(elemVal)){ 
+
+                let elem2 = document.getElementById("criteria3").getElementsByClassName('icon')[0];
+                elem2.style.backgroundColor  = "red";
+                elem2.innerText  = "✕";
+                }else {
+                let elem2 = document.getElementById("criteria3").getElementsByClassName('icon')[0];
+                elem2.style.backgroundColor  =  "forestgreen";
+                elem2.innerText  = "✔";
+                }
+
+
+                const specialCaseRegex = new RegExp(/[~`!@#$%^&*()\-_+={}[\]|\\/<>?.:;"']{1,}/)
+
+                if(elemVal.length >0 && !specialCaseRegex.test(elemVal)){ 
+
+                    let elem3 = document.getElementById("criteria2").getElementsByClassName('icon')[0];
+                    elem3.style.backgroundColor  = "red";
+                    elem3.innerText  = "✕";
+                    }else {
+                    let elem3 = document.getElementById("criteria2").getElementsByClassName('icon')[0];
+                    elem3.style.backgroundColor  =  "forestgreen";
+                    elem3.innerText  = "✔";
+                    }
+
+
+                    if(elemVal.length >0 && elemVal.length<8){ 
+
+                        let elem4 = document.getElementById("criteria4").getElementsByClassName('icon')[0];
+                        elem4.style.backgroundColor  = "red";
+                        elem4.innerText  = "✕";
+                        }else {
+                        let elem4 = document.getElementById("criteria4").getElementsByClassName('icon')[0];
+                        elem4.style.backgroundColor  =  "forestgreen";
+                        elem4.innerText  = "✔";
+                        }
+
+             const numberRegex = new RegExp(/[0-9]{1,}/);
+
+             if(elemVal.length >0 && !numberRegex.test(elemVal)){ 
+
+                let elem5 = document.getElementById("criteria5").getElementsByClassName('icon')[0];
+                elem5.style.backgroundColor  = "red";
+                elem5.innerText  = "✕";
+                }else {
+                let elem5 = document.getElementById("criteria5").getElementsByClassName('icon')[0];
+                elem5.style.backgroundColor  =  "forestgreen";
+                elem5.innerText  = "✔";
+                }
+
+        }
+
+
+
+        function validateConfirmEmail(){
+            const newPasswd = document.getElementById("newPassword").value;
+            const confirmPasswd = document.getElementById("confirmPassword");
+            let result= true;
+            if(newPasswd!=confirmPasswd.value){
+                alert("Passwords do not match!!")
+                confirmPasswd.style.borderColor = "red";
+                result=false;
+            }else{
+                confirmPasswd.style.borderColor = "darkgray";
+            }
+            return result;
+        }
+    </script>
+
+</body>
+
+</html>
